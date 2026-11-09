@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tablero de supervisión</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+:root{--bg:#eef0f3;--panel:#fff;--ink:#14181f;--ink2:#4a5360;--ink3:#7a8493;--line:#dde1e7;--soft:#f4f6f9;--accent:#1f5fbf;--acbg:#e6eefb;
+ --c0:#2a78d6;--c1:#eb6834;--c2:#0d9488;--ok:#0f7a4a;--okbg:#e2f3ea;--rest:#8a5a00;--restbg:#fdf1d8;
+ --font:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;--num:'Barlow Condensed','Arial Narrow',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1116;--panel:#171b22;--ink:#eef1f5;--ink2:#b5bdc9;--ink3:#8a94a3;--line:#2a303a;--soft:#1d222b;--accent:#6aa5f0;--acbg:#1c2a40;
+ --c0:#3987e5;--c1:#e0652f;--c2:#2dd4bf;--ok:#4cc790;--okbg:#16352a;--rest:#f5b84a;--restbg:#3a2c12;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 var(--font)}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 40px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px;margin-bottom:18px}
+.kick{font-family:var(--num);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+h1{font-family:var(--num);font-weight:700;font-size:34px;line-height:1;margin:4px 0 0;text-transform:uppercase;letter-spacing:.01em}
+.upd{font-size:13px;color:var(--ink3)}
+.step{font-family:var(--num);font-size:15px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:6px 0 12px}
+/* Paso 1 */
+.cuads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cu{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--cc);border-radius:10px;padding:18px 18px 16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s}
+.cu:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,23,42,.14)}
+.cu:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.cu .rn{font-family:var(--num);font-weight:700;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.cu .rn b{display:block;font-size:64px;line-height:.9;color:var(--cc);letter-spacing:0}
+.st{align-self:flex-start;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--okbg);color:var(--ok)}
+.st.rest{background:var(--restbg);color:var(--rest)}
+.cu .dt{font-size:13px;color:var(--ink3)}
+.cu .tot{font-family:var(--num);font-size:28px;font-weight:700;line-height:1}.cu .tot small{font-family:var(--font);font-size:13px;font-weight:500;color:var(--ink3);margin-left:4px}
+.cu .go{margin-top:2px;font-weight:600;color:var(--accent);font-size:14px}
+/* Paso 2 */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:16px}
+.sel{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;background:var(--panel);border:1px solid var(--line);border-radius:99px}
+.sel i{font-style:normal;font-family:var(--num);font-weight:700;font-size:20px;color:#fff;background:var(--cc);border-radius:99px;min-width:40px;height:34px;display:grid;place-items:center;padding:0 8px}
+.sel b{font-weight:600}.sel span{color:var(--ink3);font-size:13px}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,.q:focus-visible,.chips button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.q{font:inherit;flex:1;min-width:200px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.chips button{font:inherit;font-size:13px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer}
+.chips button b{font-weight:600;color:var(--ink);margin-left:4px}
+.chips button:hover{border-color:var(--accent)}
+.sum{font-size:14px;color:var(--ink2);margin:-4px 0 12px}
+.grid{columns:3 330px;column-gap:14px}
+.grp{break-inside:avoid;background:var(--panel);border:1px solid var(--line);border-radius:10px;margin:0 0 14px;overflow:hidden;scroll-margin-top:90px}
+.grp h2{margin:0;display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:var(--soft);border-bottom:1px solid var(--line);font-family:var(--num);font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.grp h2 span{margin-left:auto;font-family:var(--font);font-size:13px;font-weight:600;color:var(--ink3);text-transform:none;letter-spacing:0}
+.lead{padding:8px 16px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--line)}.lead b{color:var(--ink)}
+.cat{padding:10px 16px 8px}.cat+.cat{border-top:1px dashed var(--line)}
+.cat h3{margin:0 0 6px;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);display:flex;gap:8px}
+.cat h3 small{color:var(--ink3);font-weight:500}
+.cat ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.cat li{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.cat li .nn{font-family:var(--num);font-size:13px;color:var(--ink3);min-width:16px;text-align:right}
+mark{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}
+.empty{padding:30px;text-align:center;color:var(--ink3);background:var(--panel);border:1px dashed var(--line);border-radius:10px}
+footer{margin-top:22px;font-size:12.5px;color:var(--ink3);line-height:1.5}
+[hidden]{display:none!important}
+@media (max-width:760px){.bar{position:static}.cuads{grid-template-columns:1fr}.cu{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 14px}.cu .rn b{font-size:46px}.cu .rn{min-width:96px}.cu .dt{flex-basis:100%}h1{font-size:28px}.grid{columns:1}}
+@media (prefers-reduced-motion:reduce){.cu{transition:none}.cu:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div><div class="kick">Mina Aranzazu · Operaciones</div><h1>Tablero de supervisión</h1></div>
+ <div class="upd" id="upd"></div>
+</header>
+
+<section id="s1">
+ <div class="step">Paso 1 · Selecciona tu cuadrilla</div>
+ <div class="cuads" id="cuads"></div>
+</section>
+
+<section id="s2" hidden>
+ <div class="bar">
+  <div class="sel" id="sel"></div>
+  <button class="btn" id="back" type="button">Cambiar cuadrilla</button>
+  <input class="q" id="q" type="search" placeholder="Buscar nombre o categoría" aria-label="Buscar nombre o categoría" autocomplete="off">
+ </div>
+ <div class="sum" id="sum"></div>
+ <nav class="chips" id="chips" aria-label="Ir a un grupo"></nav>
+ <div class="grid" id="grid"></div>
+</section>
+
+<footer id="ft"></footer>
+</div>
+
+<script id="data" type="application/json">{"fecha":"08/11/2026","periodo":"20 X 10","turn":["2DA. TURNO","DESCANSO","1ER. TURNO"],"ini":["13-nov","13-nov",null],"fin":["02-dic","22-nov","13-nov"],"desc":["03-dic","23-nov","22-nov"],"groups":[{"g":"GROUND SUPPORT","lead":["Guerra Fraga Uriel Alejandro","Mejia Rangel German","Jaramillo Granados Luis Enrique"],"rows":[{"c":"OPERADOR DE JUMBO ANCLADOR","n":["Cepeda Coronado Ivan","Valdez Barcenas Miguel Eduardo","Perez Dominguez Rodolfo"]},{"c":"AYUDANTE DE ANCLADOR","n":["Esparza Hernandez Mauro Isidoro","Celestino Patiño Jose Angel","Garcia Mendoza Manuel"]},{"c":"OPERADOR DE JUMBO ANCLADOR","n":["Aparicio Rodriguez Agustin","Hernandez Ayala Edgar Rafael","Hernandez Garcia Emilio"]},{"c":"AYUDANTE DE ANCLADOR","n":["Rodriguez Mejia Nestor Daniel","Arreola Salas Jose Ivan","Rodriguez Gonzalez Daniel"]},{"c":"OPERADOR DE JUMBO ANCLADOR","n":["Rodriguez Dueñas Francisco Javier","Alday Miranda Jose Miguel",null]},{"c":"AYUDANTE DE ANCLADOR","n":["Chavez Dominguez Osiris","Gomez Hernandez Hector Antonio","Aguilar Lopez Francisco"]},{"c":"OPERADOR DE JUMBO ANCLADOR","n":["Mireles Candia Jose Juan","SERAFIN PINTOR HALLYER DE RENE","Herrera Reyes Noe Ernesto"]},{"c":"AYUDANTE DE ANCLADOR","n":["Alcocer Garcia Jose Roberto","Alonso Caudillo Elpidio Orlando","Aldava Diaz Martin"]},{"c":"OPERADOR DE JUMBO ANCLADOR","n":[null,null,null]},{"c":"AYUDANTE DE ANCLADOR","n":[null,null,null]}]},{"g":"DEVELOPMENT","lead":null,"rows":[{"c":"OPERADOR DE JUMBO LINEAL","n":["Martinez Camarillo Juan Jose","Saucedo Hernandez Christian","Rodriguez Lopez Jose Antonio"]},{"c":"AYUDANTE DE JUMBERO","n":["Cepeda Lumbreras Juan Alberto","Resendiz Ramirez Jacinto","Gomez Vazquez Oscar"]},{"c":"OPERADOR DE JUMBO LINEAL","n":["Morales Moreno Oscar Guillermo","Castañeda Maldonado Jesus Ignacio","Rodriguez Silva Cesar"]},{"c":"AYUDANTE DE JUMBERO","n":["Murillo Bonilla Jose Alfredo","Hernandez Oliva Luis Antonio","Bartolo Ramirez Jesus Antonio"]},{"c":"OPERADOR DE JUMBO LINEAL","n":["Zavala Gaytan Jose Ricardo","Melendez Briones Leonardo Martin","Laredo Zamora Jose De Jesus"]},{"c":"AYUDANTE DE JUMBERO","n":["Lopez Rivas Oscar Enrique","Guerrero Barraza Alonso","De Leon Martinez Edgar Adan"]},{"c":"OPERADOR DE JUMBO LINEAL","n":["Martinez Guerrero Rosendo Alejandro","Lares Lares Jorge Luis","Saenz Rosales Raul Fernando"]},{"c":"AYUDANTE DE JUMBERO","n":["Pinales Avila Eduardo Adolfo","Turrubiartes Leos Carlos Arturo","Pecina Montes Brayan Javier"]},{"c":"OPERADOR DE JUMBO LINEAL","n":[null,null,null]},{"c":"AYUDANTE DE JUMBERO","n":[null,"AVILA ROSALES BRUNO JACIEL",null]}]},{"g":"MUCK","lead":null,"rows":[{"c":"OPERADOR DE SCOOP TRAM","n":["Badillo Lopez Mario Alberto","Martinez Lopez Jose Luis","Torres Mendoza Andres"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Lozoya Munguia Osvaldo Antonio","Escareño Villagrana Jose Manuel","Gutierrez Aguilera Victor Manuel"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Gutierrez Castañeda Carlos","Sanchez Labra Jaime","Lara Gomez Juan"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Contreras Robledo Luis Angel","Dimas Anguiano Alejandro","Mejia Paz Alfredo"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Espinoza Mayorga Raymundo","Trejo Lugo Omar Fabian","Ramirez Ramirez Irving Ivan"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Valdez Borrego J Juan","Candelas Esquivel Francisco Javier","Nolasco Castelan Juan Carlos"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Garcia Lopez Cesar Jeronimo","Sanchez Sandoval Benito","Alvarez Armendariz Jose Antonio"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Loya Morales Joan Alonso","Cantero Rodriguez Edgar Erik","Diaz Peralta Vicente"]},{"c":"OPERADOR DE SCOOP TRAM","n":["Hernandez Vazquez Jesus Domingo","Ferrel Gallegos Jose Gabino","Ramirez Rivera Daniel"]},{"c":"OPERADOR DE SCOOP TRAM","n":[null,"Muñoz Gutierrez Jose De Jesus",null]}]},{"g":"HAULAGE","lead":null,"rows":[{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":["Guevara Sauceda Jose","Galaviz Regalado Nicolas Roberto","Garcia Gutierrez Andres"]},{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":["Vera Avila Juan Carlos","Quezada Polvon Flor Isela","Cardenas Solis Juan Enrique"]},{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":["Aguilar Ochoa Eliud Alejandro","Orduño Arguelles Pablo","Torres Mendoza Roberto"]},{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":["Gurrola Jesus Roberto",null,"Ortega Dominguez Myrna Magdalena"]},{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":[null,null,null]},{"c":"OPERADOR DE CAMIÓN BAJO PERFIL","n":[null,null,null]}]},{"g":"VOLADURAS","lead":null,"rows":[{"c":"OFICIAL DE VOLADURAS","n":["Gomez Lopez Sergio","Ramirez Hernandez Santos Efren","Moreno Hernandez Victor Alfonso"]},{"c":"AYUDANTE DE VOLADURAS","n":["Hernandez Escobedo Jesus Manuel","Rodriguez Galvan Diego Misael","Gonzalez Yruz Victor Manuel"]},{"c":"OFICIAL DE VOLADURAS","n":["Jimenez Rodriguez Rigoberto Guadalupe","Mendez Zamacona Juan Eduardo","Lopez Ruiz Jesus"]},{"c":"AYUDANTE DE VOLADURAS","n":["Hernandez Trejo Eduardo","Hernandez Villarreal Oscar Yazmany","Lozano Pizarro Jesus Jose"]},{"c":"OFICIAL DE VOLADURAS","n":[null,null,"Garza Rivera Aram Enaim"]},{"c":"AYUDANTE DE VOLADURAS","n":[null,null,"Sandoval Torres David"]}]},{"g":"RETRO EXCAVADORA","lead":null,"rows":[{"c":"OPERADOR DE RETROEXCAVADORA","n":["Zavala Leyva Jorge Rene","Nevarez Chaidez Francisco Javier","Orenday Garcia Jorge Alberto"]},{"c":"OPERADOR DE RETROEXCAVADORA","n":["Ramirez Salas Norberto","Medina Ontiveros Ruben","Flores Martinez Armando"]},{"c":"OPERADOR DE RETROEXCAVADORA","n":["Pinales Ubario Jesus Alfredo",null,"Rivera Ortiz Juan Josafat"]},{"c":"OPERADOR DE RETROEXCAVADORA","n":["Villeda Villeda Eutiquio","Aleman Moreno Jose Ruben","Rodriguez Avila Francisco Javier"]},{"c":"OPERADOR DE RETROEXCAVADORA","n":["Mendoza Muñoz Luis Javier","Alvarado Gonzalez Rodrigo","Campa Lopez Cruz Refugio"]},{"c":"ALBAÑIL","n":[null,null,"Bernal De Jesus Yovani"]},{"c":"AUDANTE ALBAÑIL","n":[null,null,null]},{"c":"OFICIAL DE SERVICIOS","n":["Rios Espinoza Jesus David",null,"Pereyra Burgos Jesus Alberto"]},{"c":"AYUDANTE SERVICIOS","n":["Aldava Diaz Fernando Tomas","Garcia Requenes Alfredo",null]},{"c":"AYUDANTE SERVICIOS","n":["Vazquez Vazquez Manuel",null,"Sanchez Torres Pablo Tristan"]},{"c":"OFICIAL DE SERVICIOS","n":["Gutierrez Molina Leopoldo","Monrreal Diaz Jonathan German","Aguilera Mendez Edgar Manuel"]},{"c":"AYUDANTE SERVICIOS","n":["Rivera Castro Ivan Armando",null,"Quevedo Cordova Mauricio"]},{"c":"AYUDANTE SERVICIOS","n":[null,null,null]},{"c":"OFICIAL DE SERVICIOS","n":[null,null,null]},{"c":"OPERADOR DE TIJERA","n":["Medina Perez Santiago","Rodriguez Vazquez Jose Antonio","Gaytan De La Rosa Jose Antonio"]},{"c":"OPERADOR DE TIJERA","n":[null,null,null]},{"c":"OPERADOR MAQUINA DE PIERNA","n":[null,null,null]},{"c":"AYUDANTE MAQUINA DE PIERNA","n":[null,null,null]},{"c":"CHOFER POLVORERO","n":["Arreguin Chia Jesus Eduardo","Cervantes Nuñez Otoniel Ricardo","Lira Camacho Hernan"]},{"c":"CHOFER POLVORERO","n":[null,null,null]},{"c":"AYUDANTE POLVORERO","n":["Salas Ontiveros Oscar Josue","Martinez Lucio Angel","Gamez Quiroz Alejandro"]},{"c":"CAMION DE PERSONAL","n":["Montelongo Macias Ramiro",null,"Eguia Ortiz Daniel David"]}]},{"g":"BL","lead":null,"rows":[{"c":"COORDINADADOR B. L.","n":[null,null,null]},{"c":"SUPERVISOR B. L.","n":[null,null,null]},{"c":"OPERADOR SIMBA","n":["Salas Rodriguez Armando","Morales Gutierrez Miguel",null]},{"c":"AYUDANTE SIMBA","n":["De Lira Amiz Eduardo","Cabrera Escalante Benjamin",null]},{"c":"OPERADOR SIMBA","n":["Cepeda Oranday Hector","Calva Silva Cesar Eduardo","Alcantar Flores Marco Antonio"]},{"c":"AYUDANTE SIMBA","n":["Ruiz Quiroz Roberto","Torres Estrada Noel Alberto","Segovia De La Torre Leobardo"]},{"c":"OPERADOR SIMBA","n":["Delgado Diaz J. Natividad","Chavez Ibarra Jesus Manuel","Rojas Rodriguez Juan Pablo"]},{"c":"AYUDANTE SIMBA","n":["Gallegos Escobedo Ismael","Salas Rascon Jorge","Basoco Salcido Manuel Guerrero"]},{"c":"OPERADOR SIMBA","n":["Mozqueda Hernandez Jose Alfredo","Alvarado Gonzalez Martin","Delgado Iglesas Oscar"]},{"c":"AYUDANTE SIMBA","n":["Cabrera Ortiz Jose Alejandro","Ortega Rosales Israel","Briseño Alvarado Manuel de Jesus"]},{"c":"OPERADOR SIMBA","n":["Granados Leon Felix Aaron","Castañeda Orocio Orlando","Camarillo Ramirez Carlos Uriel"]},{"c":"AYUDANTE SIMBA","n":["Torres Serna Uri Jahaziel","Ibarra Cano Josthyn Renato","Briones Ledezma Pedro Antonio"]},{"c":"OPERADOR SIMBA","n":[null,null,null]},{"c":"OFICIAL DE INYECCIÓN","n":["Rodriguez Mendoza Agustin",null,"Pinela Sosa Luis Javier"]},{"c":"AYUDANTE DE INYECCIÓN","n":[null,"Esquivel Machado Cesar Omar","Saucedo Hernandez Brayan Guadalupe"]},{"c":"OFICIAL DE VOL. B. L.","n":["Sarmiento Loza Jose De Jesus","Gil Alvarado Esteban Edgardo",null]},{"c":"AYUDANTE DE VOLADURAS BL","n":["Pacheco Villapudua Jose Juan",null,null]},{"c":"OPERADOR DE BULLDOZER","n":[null,null,"Degollado Sanchez Mauricio"]},{"c":"OPERADOR MOTOCONFORMADORA","n":[null,null,null]},{"c":"TELEHANDER #06","n":[null,null,null]},{"c":"TELEHANDER #04","n":[null,null,null]},{"c":"TELEHANDER #04","n":[null,null,null]}]},{"g":"Concreto","lead":null,"rows":[{"c":"OPERADOR DE ALPHA","n":["Verastegui Rodriguez Juan Jesus","Avila Heredia Leobardo","Medero Macedo Martin"]},{"c":"AYUDANTE DE ALPHA","n":["Pasillas Flores Jose Carlos",null,"Vazquez Salas Juan Carlos"]},{"c":"OPERADOR DE ALPHA","n":["Sauceda Lopez Jose Luis","Beltran Rodriguez Ruben","Escobedo Ramirez Pablo Desiderio"]},{"c":"AYUDANTE DE ALPHA","n":[null,"Escobedo Lopez Pablo","Ayala Castro Salvador Angel"]},{"c":"OPERADOR DE ALPHA","n":[null,null,null]},{"c":"AYUDANTE DE ALPHA","n":[null,null,null]},{"c":"OPERADOR DE TROMPO","n":["Sabines Pascual Hugolino","Guzman Ortega Jesus","Tarango Ortiz Luis Enrique"]},{"c":"OPERADOR DE TROMPO","n":["Escareño Vazquez Miguel Angel","Rodriguez Ernesto","Ambriz Esparza Hector Manuel"]},{"c":"OPERADOR DE TROMPO","n":["Carrizales Rivas Rodrigo","Vazquez Parra Cirilo","Martinez Sandate Jose Valente"]},{"c":"OPERADOR DE TROMPO","n":["Carcamo Rosales Rito Reyes","Molina Mancinas Oscar Alberto","Arellano Castro Martin Eduardo"]},{"c":"OPERADOR DE TROMPO","n":["Chaparro Lozano Raul Alexis","Larguero Quezada Jesus Fidel","Ortiz Gonzalez Ruben"]},{"c":"OPERADOR DE TROMPO","n":["Garcia Olivares Roberto Carlos",null,null]},{"c":"OPERADOR DE TROMPO","n":[null,null,null]},{"c":"OPERADOR DE TROMPO","n":[null,null,null]}]},{"g":"ACARREO","lead":null,"rows":[{"c":"SUPERV ACARREO","n":[null,null,null]},{"c":"CAPACITADOR TECNICO","n":["Hernandez Reynoso Jesus Ernesto",null,"Fonseca Rangel Roberto Adrian"]},{"c":"CAMION VOLTEO","n":["Rodriguez Torres Juan Manuel",null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"CAMION VOLTEO","n":[null,null,null]},{"c":"OPERADOR PIPA DE AGUA","n":[null,null,null]},{"c":"OPERADOR PIPA DIESEL","n":["Lopez Campos Javier Jonathan","Romero Rios Cristian Darinel","Gonzalez Garcia Epigmenio"]},{"c":"OPERADOR TELEHANDLER","n":["Frias Aleman Einner Ubaldo","Blanco Valenzuela Omar Alejandro","Sanchez Francisco Javier"]},{"c":"OPERADOR MINICARGADOR","n":["Corona Casillas Cristian",null,null]},{"c":"AYUDANTE MINICARDOR","n":["Gonzalez Diaz Ivan De Jesus","Garcia De La Rosa Jesus Esteban",null]},{"c":"AYUDANTE MINICARDOR","n":["Rodriguez Melendez Benjamin de Jesus",null,null]},{"c":"OPERADOR PAYLOADER","n":["Castañeda Castro Eleuterio","Bernal Contreras Adan","Gutierrez Rico Jose Gerardo"]},{"c":"AYUDANTE GENERAL","n":[null,null,null]},{"c":"LAMPISTERO","n":["Hau Casanova Yerli Militza","Martinez Josec David","Reyna Martinez Yael Carlos"]},{"c":"AYUDANTE DE TOPOGRAFO","n":[null,"Davila Vazquez Juan Manuel","Rangel Salas Luis Fernando"]},{"c":"MANTENIMIENTO A CAMPAMENTO","n":["Alvarez Esquivel Martha Delia","Requenes Hernandez Ma Virginia","Luna Montejano Ana Laura"]},{"c":"MANTENIMIENTO A CAMPAMENTO","n":["Uresti Perez Maria Victoria","Cepeda Cardona Patricia","Luna De La Rosa Irene"]},{"c":"MANTENIMIENTO A CAMPAMENTO","n":["Jaramillo Trejo Maribel","Sanchez Lumbreras Carmen Berenice","Mendoza Ordaz Roberto"]},{"c":"MANTENIMIENTO A CAMPAMENTO","n":["Ortiz Melendez Janelicia",null,"Cabrera Gamez Juana"]},{"c":"MANTENIMIENTO A CAMPAMENTO","n":["Magno Sandate Erick Alejandro","Gandara Lopez Juan Rafael",null]}]},{"g":"Minero Continuo","lead":null,"rows":[{"c":"OPERADOR MINERO CONTINUO","n":["Espinoza Rosales Jesus Maria","Tovias Rodriguez Mario Alberto","Ortega Martinez Roberto"]},{"c":"AYUDANTE DE MINERO CONTINUO","n":["Ferniza Hernandez Gerardo Ulises","Escobedo Garcia Ricardo","Botello Andrade Ivan Alejandro"]},{"c":"OPERADOR MINERO CONTINUO","n":["Cruz Martinez Mario Alberto",null,null]}]}]}</script>
+<script>
+(()=>{
+const D=JSON.parse(document.getElementById('data').textContent);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tc=s=>{s=String(s||'').replace(/\s+/g,' ').trim();if(s.length<=3)return s;return s.toLowerCase().replace(/(^|[\s.(#/-])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase()).replace(/\bB\. ?l\./gi,'B. L.').replace(/\bBl\b/g,'BL').replace(/\bSt\b/g,'ST').replace(/\bCbp\b/g,'CBP')};
+const nz=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
+// Índices en los datos: 0 = Cuadrilla II, 1 = Cuadrilla I, 2 = Cuadrilla III
+const CU=[{i:1,n:'I',c:'var(--c1)'},{i:0,n:'II',c:'var(--c0)'},{i:2,n:'III',c:'var(--c2)'}];
+const turno=i=>{const t=nz(D.turn[i]);return t.startsWith('1ER')?'1er. turno':t.startsWith('2D')?'2do. turno':t.startsWith('DESC')?'Descanso':tc(D.turn[i])};
+const fechas=i=>{const p=[];if(D.ini&&D.ini[i])p.push('inicia '+D.ini[i]);if(D.fin&&D.fin[i])p.push('termina '+D.fin[i]);if(D.desc&&D.desc[i])p.push('descansa '+D.desc[i]);return p.join(' · ')};
+const total=i=>D.groups.reduce((a,g)=>a+g.rows.filter(r=>r.n[i]).length,0);
+
+$('upd').textContent=`Pueble actualizado el ${D.fecha||'—'} · periodo ${D.periodo||'—'}`;
+$('ft').textContent=`Fuente: PUEBLE ARANZAZU.xlsx, hoja OPERACIONES (actualizada el ${D.fecha||'—'}). Se muestra el personal asignado a cada cuadrilla; no aparecen vacantes, Stand by ni canceladas.`;
+
+$('cuads').innerHTML=CU.map(c=>{const t=turno(c.i),rest=/Descanso/i.test(t);
+ return `<button class="cu" type="button" data-i="${c.i}" style="--cc:${c.c}"><div class="rn">Cuadrilla<b>${c.n}</b></div><span class="st${rest?' rest':''}">${esc(rest?'Descanso':'En turno · '+t)}</span><div class="dt">${esc(fechas(c.i))}</div><div class="tot">${total(c.i)}<small>personas</small></div><div class="go">Ver personal →</div></button>`}).join('');
+
+let CUR=null;
+function groupsFor(i,q){
+ return D.groups.map((g,gi)=>{const cats=[];g.rows.forEach(r=>{const n=r.n[i];if(!n)return;if(q&&!nz(n).includes(q)&&!nz(r.c).includes(q))return;
+   let c=cats.find(x=>x.c===nz(r.c));if(!c){c={c:nz(r.c),l:tc(r.c),n:[]};cats.push(c)}c.n.push(n)});
+  return {gi,g:tc(g.g),lead:g.lead&&g.lead[i]?g.lead[i]:null,cats,tot:cats.reduce((a,c)=>a+c.n.length,0)}}).filter(x=>x.tot);
+}
+function hl(s,q){const t=tc(s);if(!q)return esc(t);const k=nz(t),at=k.indexOf(q);return at<0?esc(t):esc(t.slice(0,at))+'<mark>'+esc(t.slice(at,at+q.length))+'</mark>'+esc(t.slice(at+q.length))}
+function render(){
+ const i=CUR,c=CU.find(x=>x.i===i),q=nz($('q').value);
+ $('sel').style.setProperty('--cc',c.c);
+ $('sel').innerHTML=`<i>${c.n}</i><div><b>Cuadrilla ${c.n}</b> <span>· ${esc(turno(i))}${fechas(i)?' · '+esc(fechas(i)):''}</span></div>`;
+ const G=groupsFor(i,q),n=G.reduce((a,g)=>a+g.tot,0);
+ $('sum').textContent=q?`${n} ${n===1?'persona':'personas'} con «${$('q').value.trim()}»`:`${n} personas en ${G.length} grupos de Operaciones`;
+ $('chips').innerHTML=q?'':G.map(g=>`<button type="button" data-g="${g.gi}">${esc(g.g)}<b>${g.tot}</b></button>`).join('');
+ $('grid').innerHTML=G.length?G.map(g=>`<article class="grp" id="g${g.gi}"><h2>${esc(g.g)}<span>${g.tot} ${g.tot===1?'persona':'personas'}</span></h2>${g.lead?`<div class="lead">A cargo: <b>${esc(tc(g.lead))}</b></div>`:''}${g.cats.map(ct=>`<div class="cat"><h3>${esc(ct.l)}<small>${ct.n.length}</small></h3><ol>${ct.n.map((x,k)=>`<li><span class="nn">${k+1}</span><span>${hl(x,q)}</span></li>`).join('')}</ol></div>`).join('')}</article>`).join(''):'<div class="empty">Sin resultados en esta cuadrilla.</div>';
+}
+function show(i,push){
+ if(i==null){CUR=null;$('s1').hidden=false;$('s2').hidden=true;if(push)setHash('');return}
+ CUR=i;$('q').value='';$('s1').hidden=true;$('s2').hidden=false;render();window.scrollTo(0,0);if(push)setHash('cuadrilla-'+CU.find(x=>x.i===i).n.toLowerCase());
+}
+function setHash(h){try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search)}catch(e){location.hash=h}}
+function fromHash(){const m=(location.hash||'').match(/^#cuadrilla-(i{1,3})$/i);const c=m&&CU.find(x=>x.n===m[1].toUpperCase());show(c?c.i:null,false)}
+$('cuads').addEventListener('click',e=>{const b=e.target.closest('.cu');if(b)show(+b.dataset.i,true)});
+$('back').addEventListener('click',()=>show(null,true));
+$('q').addEventListener('input',render);
+$('chips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const el=$('g'+b.dataset.g);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'})});
+window.addEventListener('hashchange',fromHash);
+fromHash();
+})();
+</script>
+</body>
+</html>
