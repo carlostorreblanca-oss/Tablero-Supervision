@@ -39,13 +39,14 @@ button{font:inherit;color:inherit}
 
 /* Paso 1: cuadrillas */
 .cuads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.cu{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"n s" "n d" "t t";gap:4px 14px;align-items:center;position:relative;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.cu{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"n s" "n d" "c c" "t t";gap:4px 14px;align-items:center;position:relative;overflow:hidden;transition:border-color .15s,box-shadow .15s}
 .cu::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cc)}
 .cu:hover{border-color:var(--cc);box-shadow:0 8px 22px rgba(16,24,40,.08)}
 .cu .n{grid-area:n;font-family:var(--cond);font-weight:700;font-size:56px;line-height:.85;color:var(--cc);min-width:52px}
 .cu .n small{display:block;font-size:12px;letter-spacing:.14em;color:var(--ink3);font-weight:600;margin-bottom:4px}
 .cu .s{grid-area:s;justify-self:start}
 .cu .d{grid-area:d;font-size:12.5px;color:var(--ink3)}
+.cu .cap{grid-area:c;margin-top:8px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}.cu .cap b{display:block;font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:600;margin-top:1px}
 .cu .t{grid-area:t;display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:8px}
 .cu .t b{font-family:var(--cond);font-size:26px;font-weight:700}
 .cu .t b small{font-family:var(--font);font-size:12.5px;color:var(--ink3);font-weight:500;margin-left:4px}
@@ -61,6 +62,12 @@ button{font:inherit;color:inherit}
 .sel span{display:block;font-size:12.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btn{font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:9px;border:1px solid var(--hair);background:var(--panel);cursor:pointer;white-space:nowrap;flex:none}
 .btn:hover{border-color:var(--brand);color:var(--brand-ink)}
+.capbox{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--brand-line);border-radius:var(--r);padding:12px 14px;margin-bottom:12px}
+.capbox[hidden]{display:none}
+.capbox svg{flex:none;width:34px;height:34px;padding:7px;border-radius:9px;background:var(--brand-bg);color:var(--brand-ink)}
+.capbox small{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand-ink)}
+.capbox b{display:block;font-family:var(--cond);font-size:22px;font-weight:700;line-height:1.1;text-transform:uppercase;letter-spacing:.01em}
+.capbox span{display:block;font-size:12.5px;color:var(--ink3)}
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
 .q{flex:1 1 260px;min-width:0;font:inherit;font-size:16px;padding:11px 14px 11px 38px;border-radius:10px;border:1px solid var(--hair);background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237d8594' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 13px center;color:var(--ink)}
 .kpis{display:flex;gap:8px;flex-wrap:wrap}
@@ -90,32 +97,39 @@ button{font:inherit;color:inherit}
 .act.k .tot b{color:var(--brand-ink)}
 .act .tot small{font-size:11.5px;color:var(--ink3)}
 .lead{margin:0 14px 10px;font-size:12.5px;color:var(--ink2)}.lead b{font-weight:600;color:var(--ink)}
-.units{display:flex;flex-direction:column;gap:8px;padding:0 10px 10px}
-/* Grupo operador + ayudante: contorno de 1 px */
-.unit{border:1px solid var(--hair);border-radius:9px;overflow:hidden}
-.role{padding:9px 12px 10px}
-.role+.role{border-top:1px solid var(--line);background:var(--soft)}
-.role h3{margin:0 0 6px;display:flex;align-items:flex-start;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
-.role h3 .tag{flex:none;margin-top:-1px;font-size:10.5px;letter-spacing:.08em;padding:1px 6px;border-radius:4px;background:var(--ink);color:var(--panel)}
-.role.ay h3 .tag{background:transparent;color:var(--ink2);box-shadow:inset 0 0 0 1px var(--hair)}
-.role h3 em{font-style:normal;min-width:0;line-height:1.25}
-.role h3 span{margin-left:auto;flex:none;font-family:var(--cond);font-size:14px;color:var(--ink2)}
-.role ol{margin:0;padding:0;list-style:none;display:grid;gap:2px}
-.role li{display:flex;gap:8px;font-size:15px;line-height:1.3;padding:2px 0}
-.role li i{font-style:normal;flex:none;width:16px;text-align:right;font-family:var(--cond);font-size:13px;color:var(--ink3);padding-top:1px}
+.units{display:flex;flex-direction:column;gap:10px;padding:0 10px 12px}
+/* Unidad: título del puesto y, debajo, cada operador con su ayudante en un recuadro de 1 px */
+.unit+.unit{margin-top:4px}
+.unit h3{margin:2px 2px 6px;display:flex;align-items:baseline;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2)}
+.unit h3 em{font-style:normal;min-width:0;line-height:1.25}
+.unit h3 span{margin-left:auto;flex:none;font-size:11.5px;letter-spacing:.02em;text-transform:none;font-weight:500;color:var(--ink3)}
+.unit h3 .tag{flex:none;font-size:10px;letter-spacing:.08em;padding:1px 6px;border-radius:4px;background:var(--ink);color:var(--panel)}
+.crews{display:grid;gap:6px}
+.crew{border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:var(--panel)}
+.p{display:grid;grid-template-columns:70px 1fr;align-items:baseline;gap:8px;padding:7px 10px;font-size:15px;line-height:1.3}
+.p b{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.p.op b{color:var(--ink)}
+.p.ay{border-top:1px solid var(--line);background:var(--soft)}
+.p.ay span{color:var(--ink2)}
+.p .no{font-style:italic;color:var(--ink3)!important;font-size:14px}
+.act.k .p.op b{color:var(--brand-ink)}
+.list{margin:0;padding:6px 10px;list-style:none;display:grid;gap:2px;border:1px solid var(--hair);border-radius:8px}
+.list li{display:flex;gap:8px;font-size:15px;line-height:1.3;padding:3px 0}
+.list li+li{border-top:1px solid var(--line)}
+.list li i{font-style:normal;flex:none;width:16px;text-align:right;font-family:var(--cond);font-size:13px;color:var(--ink3);padding-top:1px}
 mark{background:#fde68a;color:#111;border-radius:2px;padding:0 1px}
 .empty{padding:30px;text-align:center;color:var(--ink3);background:var(--panel);border:1px dashed var(--hair);border-radius:var(--r)}
 footer{margin-top:8px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3);line-height:1.5}
 
 /* Tablet vertical y teléfonos grandes */
-@media (max-width:999px) and (min-width:700px){.grid{gap:12px}.grid.o{column-gap:12px}.grid.o .act{margin-bottom:12px}.role li{font-size:14px}.act h2{font-size:20px}.act header{padding:12px 12px 8px}.units{padding:0 8px 8px}.role{padding:8px 10px 9px}}
+@media (max-width:999px) and (min-width:700px){.grid{gap:12px}.grid.o{column-gap:12px}.grid.o .act{margin-bottom:12px}.p,.list li{font-size:14px}.p{grid-template-columns:1fr;gap:1px;padding:6px 9px}.act h2{font-size:20px}.act header{padding:12px 12px 8px}.units{padding:0 8px 10px}}
 /* Teléfonos */
 @media (max-width:699px){
  :root{--pad:12px}
  .top{gap:10px;padding:12px 0 10px;margin-bottom:14px}.top img{height:28px}.top h1{font-size:19px}.top p{font-size:11.5px}
  .top .upd{display:none}
  .cuads{grid-template-columns:1fr;gap:10px}
- .cu{padding:14px 14px 12px 18px;grid-template-areas:"n s t" "n d t";grid-template-columns:auto 1fr auto}
+ .cu{padding:14px 14px 12px 18px;grid-template-areas:"n s t" "n d t" "c c c";grid-template-columns:auto 1fr auto}.cu .cap{border-top:1px solid var(--line);padding-top:8px}.capbox b{font-size:20px}
  .cu .n{font-size:44px;min-width:44px}
  .cu .t{border:0;padding:0;margin:0;flex-direction:column;align-items:flex-end;gap:2px}
  .cu .t span{font-size:12.5px}
@@ -142,6 +156,7 @@ footer{margin-top:8px;padding-top:14px;border-top:1px solid var(--line);font-siz
 
 <section id="s2" hidden>
  <div class="bar"><div class="sel" id="sel"></div><button class="btn" id="back" type="button">Cambiar</button></div>
+ <div class="capbox" id="capbox"></div>
  <div class="tools">
   <input class="q" id="q" type="search" placeholder="Buscar nombre o categoría" aria-label="Buscar nombre o categoría" autocomplete="off" enterkeyhint="search">
   <div class="kpis" id="kpis"></div>
@@ -177,41 +192,58 @@ const tok=c=>nz(c).replace(/[^A-Z ]/g,' ').split(' ').filter(t=>t.length>=3&&!ST
 const pairs=(a,b)=>{const B=tok(b);return tok(a).some(t=>B.some(u=>u.slice(0,3)===t.slice(0,3)))};
 function build(i){
  return D.groups.map((g,gi)=>{
-  const key=nz(g.g),meta=ACT[key]||[tc(g.g),''],units=[];let last=null;
-  const unitFor=c=>{let u=units.find(x=>x.k===nz(c));if(!u){u={k:nz(c),op:{c,n:[]},ay:null};units.push(u)}return u};
+  const key=nz(g.g),meta=ACT[key]||[tc(g.g),''],units=[];let last=null,prev=null;
+  const unitFor=(c,solo)=>{const k=(solo?'S|':'')+nz(c);let u=units.find(x=>x.k===k);if(!u){u={k,c,solo:!!solo,crews:[],pair:false};units.push(u)}return u};
   g.rows.forEach(r=>{
-   if(!isAy(r.c)){last=unitFor(r.c);if(r.n[i])last.op.n.push(r.n[i]);return}
-   let u=(last&&pairs(r.c,last.op.c))?last:units.find(x=>x.op&&pairs(r.c,x.op.c));
-   if(!u){u=units.find(x=>x.k===nz(r.c));if(!u){u={k:nz(r.c),op:null,ay:{c:r.c,n:[]}};units.push(u)}}
-   if(!u.ay)u.ay={c:r.c,n:[]};
-   if(r.n[i])u.ay.n.push(r.n[i]);
+   const any=r.n.some(Boolean);
+   if(!isAy(r.c)){const u=unitFor(r.c);const cr={op:r.n[i]||null,ay:[],slot:false,any,cat:r.c,before:(prev&&prev.cat===r.c&&!isAy(prev.cat))?prev:null};u.crews.push(cr);last=cr;last.u=u;prev=cr;return}
+   let t=null;
+   if(last&&pairs(r.c,last.cat)){t=last;if(!t.any&&t.before&&t.before.any)t=t.before}
+   if(t){t.slot=true;t.u.pair=true;if(r.n[i])t.ay.push(r.n[i])}
+   else{const u=unitFor(r.c,true);if(r.n[i])u.crews.push({op:r.n[i],ay:[],slot:false,cat:r.c})}
+   prev={cat:r.c};
   });
-  units.forEach(u=>{u.t=(u.op?u.op.n.length:0)+(u.ay?u.ay.n.length:0)});
+  units.forEach(u=>{u.crews=u.crews.filter(c=>c.op||c.ay.length);u.nop=u.crews.filter(c=>c.op).length;u.nay=u.crews.reduce((a,c)=>a+c.ay.length,0);u.t=u.nop+u.nay});
   const U=units.filter(u=>u.t);
   return {gi,key,name:meta[0],sub:meta[1],k:meta[2]||0,lead:g.lead&&g.lead[i]?g.lead[i]:null,units:U,tot:U.reduce((a,u)=>a+u.t,0)};
  }).filter(a=>a.tot).sort((a,b)=>(a.k||99)-(b.k||99)||a.gi-b.gi);
 }
+const capitan=i=>{const g=D.groups.find(x=>x.lead&&x.lead.some(Boolean));return g&&g.lead[i]?g.lead[i]:null};
 const total=i=>build(i).reduce((a,x)=>a+x.tot,0);
 
 $('upd').innerHTML=`Pueble al<b>${esc(D.fecha||'—')}</b>`;
 $('ft').textContent=`Fuente: PUEBLE ARANZAZU.xlsx, hoja OPERACIONES · actualizado el ${D.fecha||'—'} · periodo ${D.periodo||'—'}. Solo personal asignado; no aparecen vacantes, Stand by ni canceladas.`;
 $('cuads').innerHTML=CU.map(c=>{const t=turno(c.i),rest=/Descanso/i.test(t);
- return `<button class="cu" type="button" data-i="${c.i}" style="--cc:${c.c}"><div class="n"><small>CUADRILLA</small>${c.n}</div><span class="s chip${rest?' rest':''}">${esc(rest?'Descanso':'En turno · '+t)}</span><div class="d">${esc(fechas(c.i))}</div><div class="t"><b>${total(c.i)}<small>personas</small></b><span>Ver personal →</span></div></button>`}).join('');
+ return `<button class="cu" type="button" data-i="${c.i}" style="--cc:${c.c}"><div class="n"><small>CUADRILLA</small>${c.n}</div><span class="s chip${rest?' rest':''}">${esc(rest?'Descanso':'En turno · '+t)}</span><div class="d">${esc(fechas(c.i))}</div>${capitan(c.i)?`<div class="cap">Capitán<b>${esc(tc(capitan(c.i)))}</b></div>`:''}<div class="t"><b>${total(c.i)}<small>personas</small></b><span>Ver personal →</span></div></button>`}).join('');
 
 let CUR=null;
 function hl(s,q){const t=tc(s);if(!q)return esc(t);const k=nz(t),at=k.indexOf(q);return at<0?esc(t):esc(t.slice(0,at))+'<mark>'+esc(t.slice(at,at+q.length))+'</mark>'+esc(t.slice(at+q.length))}
 const lab=c=>{const t=tc(String(c||'').replace(/^\s*(operador(a)?|oficial|ayudante|audante|chofer)\s+(de\s+)?/i,''));return t?t.charAt(0).toUpperCase()+t.slice(1):''};
-function role(r,cls,tag,q){if(!r||!r.n.length)return '';const N=q?r.n.filter(x=>nz(x).includes(q)||nz(r.c).includes(q)):r.n;if(!N.length)return '';
- return `<div class="role ${cls}"><h3>${tag?`<b class="tag">${tag}</b>`:''}<em>${esc(tag?(lab(r.c)||tc(r.c)):tc(r.c))}</em><span>${N.length}</span></h3><ol>${N.map((x,k)=>`<li><i>${k+1}</i><span>${hl(x,q)}</span></li>`).join('')}</ol></div>`}
+const opTag=c=>{const n=nz(c);return /^OFICIAL/.test(n)?'Oficial':/^CHOFER/.test(n)?'Chofer':/^OPERADOR/.test(n)?'Operador':''};
+const hit=(x,q)=>!q||nz(x).includes(q);
+function unitHtml(u,q){
+ const catHit=q&&nz(u.c).includes(q);
+ const C=u.crews.filter(c=>!q||catHit||hit(c.op||'',q)||c.ay.some(x=>hit(x,q)));
+ if(!C.length)return '';
+ const title=esc(u.solo||!opTag(u.c)?tc(u.c):(lab(u.c)||tc(u.c)));
+ if(u.pair){
+  const tag=opTag(u.c)||'Oficial';
+  const crews=C.map(c=>`<div class="crew"><div class="p op"><b>${tag}</b>${c.op?`<span>${hl(c.op,q)}</span>`:'<span class="no">Sin '+tag.toLowerCase()+'</span>'}</div>${c.ay.length?c.ay.map(x=>`<div class="p ay"><b>Ayudante</b><span>${hl(x,q)}</span></div>`).join(''):(c.slot?'<div class="p ay"><b>Ayudante</b><span class="no">Sin ayudante</span></div>':'')}</div>`).join('');
+  return `<div class="unit pr"><h3><em>${title}</em><span>${u.nop} ${tag.toLowerCase()}${u.nop===1?'':(tag==='Oficial'?'es':'es')} · ${u.nay} ayudante${u.nay===1?'':'s'}</span></h3><div class="crews">${crews}</div></div>`;
+ }
+ const tag=u.solo?'Ayudante':opTag(u.c);
+ return `<div class="unit"><h3>${tag?`<b class="tag">${tag}</b>`:''}<em>${title}</em><span>${C.length}</span></h3><ol class="list">${C.map((c,k)=>`<li><i>${k+1}</i><span>${hl(c.op,q)}</span></li>`).join('')}</ol></div>`;
+}
 function card(a,q){
- const units=a.units.map(u=>{const h=role(u.op,'op',/^OFICIAL/.test(u.op?nz(u.op.c):'')?'Oficial':/^CHOFER/.test(u.op?nz(u.op.c):'')?'Chofer':/^OPERADOR/.test(u.op?nz(u.op.c):'')?'Operador':'',q)+role(u.ay,'ay','Ayudante',q);return h?`<div class="unit">${h}</div>`:''}).filter(Boolean);
+ const units=a.units.map(u=>unitHtml(u,q)).filter(Boolean);
  if(!units.length)return '';
- return `<article class="act${a.k?' k':''}" id="a${a.gi}"><header><h2>${esc(a.name)}${a.sub?`<small>${esc(a.sub)}</small>`:''}</h2><div class="tot"><b>${a.tot}</b><small>${a.tot===1?'persona':'personas'}</small></div></header>${a.lead?`<p class="lead">A cargo: <b>${esc(tc(a.lead))}</b></p>`:''}<div class="units">${units.join('')}</div></article>`;
+ return `<article class="act${a.k?' k':''}" id="a${a.gi}"><header><h2>${esc(a.name)}${a.sub?`<small>${esc(a.sub)}</small>`:''}</h2><div class="tot"><b>${a.tot}</b><small>${a.tot===1?'persona':'personas'}</small></div></header><div class="units">${units.join('')}</div></article>`;
 }
 function render(){
  const i=CUR,c=CU.find(x=>x.i===i),q=nz($('q').value),A=build(i);
  $('sel').style.setProperty('--cc',c.c);
  $('sel').innerHTML=`<i>${c.n}</i><div><b>Cuadrilla ${c.n} · ${esc(turno(i))}</b><span>${esc(fechas(i))}</span></div>`;
+ const cp=capitan(i);$('capbox').hidden=!cp;$('capbox').innerHTML=cp?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h20"/><path d="M4 18v-3a8 8 0 0 1 16 0v3"/><path d="M12 7v6"/><path d="M8.5 8.5 9.5 13M15.5 8.5 14.5 13"/></svg><div><small>Capitán a cargo</small><b>${esc(tc(cp))}</b><span>Responsable de toda la cuadrilla ${c.n}</span></div>`:'';
  const tot=A.reduce((s,a)=>s+a.tot,0),crit=A.filter(a=>a.k).reduce((s,a)=>s+a.tot,0);
  $('kpis').innerHTML=`<div class="kpi"><b>${tot}</b>personas</div><div class="kpi k"><b>${crit}</b>en críticas</div>`;
  $('chips').innerHTML=q?'':A.map(a=>`<button type="button" class="${a.k?'k':''}" data-a="${a.gi}">${esc(a.name)}<b>${a.tot}</b></button>`).join('');
