@@ -1,5 +1,5 @@
-# Tablero de supervisión · Mina Aranzazu
+# Tablero Supervisión Mina · Aranzazu
 
-Página para supervisores: elige tu cuadrilla y consulta al personal de Operaciones por grupo y categoría.
+Página para supervisores de Mina: elige tu cuadrilla y consulta al personal de Operaciones por actividad, con cada operador y su ayudante.
 
 Fuente: PUEBLE ARANZAZU.xlsx (hoja OPERACIONES). Se actualiza automáticamente cuando cambia el archivo.
